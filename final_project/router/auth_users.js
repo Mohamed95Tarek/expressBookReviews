@@ -38,19 +38,20 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
     if(books[req.params.isbn]){
-        books[req.params.isbn]['reviews'] = {"review" : req.body.review, "username": req.session.authorization.username}
+        books[req.params.isbn]['reviews'][req.session.authorization.username] = req.body.review
         return res.status(200).json(books[req.params.isbn]);
     }else{
-        return res.status(404).json({message: "Book Not found"});
+        return res.status(404).json({message: "Book Not Found"});
     }
 });
+
 //Delete a Book Review
 regd_users.delete("/auth/review/:isbn", (req, res) => {
     if(books[req.params.isbn]){
-        books[req.params.isbn]['reviews'] = {"review" : req.body.review, "username": req.session.authorization.username}
-        return res.status(200).json(books[req.params.isbn]);
+        delete books[req.params.isbn]['reviews'][req.session.authorization.username]
+        return res.status(200).json({message:"Review Deleted Successfully", data: books[req.params.isbn]['reviews']});
     }else{
-        return res.status(404).json({message: "Book Not found"});
+        return res.status(404).json({message: "Book Not Found"});
     }
 });
 

@@ -21,23 +21,23 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-    return res.status(200).send(JSON.stringify(books));
+public_users.get('/', async function (req, res) {
+    return res.status(200).send(JSON.stringify(await books));
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+public_users.get('/isbn/:isbn', async function (req, res) {
     if(books[req.params.isbn]){
-        return res.status(200).json(books[req.params.isbn]);
+        return res.status(200).json(await books[req.params.isbn]);
     }else{
         return res.status(404).json({message: "Book Not found"});
     }
  });
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
+public_users.get('/author/:author', async function (req, res) {
     var selectedBooks = [];
-    Object.values(books).forEach((item) => {
+    Object.values(await books).forEach((item) => {
         (item.author == req.params.author)? selectedBooks=[item] : null
     });
     if(selectedBooks.length>0){
@@ -48,9 +48,9 @@ public_users.get('/author/:author',function (req, res) {
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
+public_users.get('/title/:title',async function (req, res) {
     var selectedBooks = [];
-    Object.values(books).forEach((item) => {
+    Object.values(await books).forEach((item) => {
         (item.title == req.params.title)? selectedBooks=[item] : null
     });
     if(selectedBooks.length>0){
